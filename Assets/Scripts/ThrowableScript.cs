@@ -20,10 +20,11 @@ public class ThrowableScript : MonoBehaviour {
 
   private void CheckVisible() {
     Vector2 direction = Camera.main.WorldToViewportPoint(this.transform.position);
-    if (direction.x >= 0 && direction.x <= 1 && direction.y >= 0 && direction.y <= 1) {
+    if (direction.x >= 0.05 && direction.x <= 0.95 && direction.y >= 0.05 && direction.y <= 0.95) {
       controller.GetComponent<ThrowableController>().UpdateObjects(this.gameObject, false);
     } else {
       controller.GetComponent<ThrowableController>().UpdateObjects(this.gameObject, true);
+      Diselect();
     }
   }
 
@@ -37,6 +38,6 @@ public class ThrowableScript : MonoBehaviour {
   }
 
   public void Diselect() {
-    animator.StopPlayback();
+    animator.Play("Idle");
   }
 }

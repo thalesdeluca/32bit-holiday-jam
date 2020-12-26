@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour {
   void Start() {
     rigidbody = GetComponent<Rigidbody2D>();
     stepTime = 0;
-    updateVisible();
+
   }
 
   // Update is called once per frame

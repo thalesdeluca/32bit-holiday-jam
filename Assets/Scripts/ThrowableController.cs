@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿using System.Runtime.Serialization;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ThrowableController : MonoBehaviour {
   private List<GameObject> objectsVisible;
   private ThrowableScript selected;
+
+  private int currentObj = 0;
   // Start is called before the first frame update
   void Start() {
     objectsVisible = new List<GameObject>();
@@ -14,6 +18,7 @@ public class ThrowableController : MonoBehaviour {
   void Update() {
     var changeLeft = Input.GetButtonDown("Select Left");
     var changeRight = Input.GetButtonDown("Select Right");
+
 
     if (changeLeft || changeRight) {
 
@@ -30,36 +35,51 @@ public class ThrowableController : MonoBehaviour {
 
   GameObject GetObjectClose(bool left) {
     if (objectsVisible.Count > 0) {
-      GameObject mostClose = objectsVisible[0];
-      float distanceClose = Vector2.Distance(mostClose.transform.position, this.transform.position);
-      int lastPoints = 0;
-      foreach (var obj in objectsVisible) {
-        Debug.Log(obj.name);
-        var direction = Camera.main.WorldToViewportPoint(obj.transform.position);
-        float distanceObj = Vector2.Distance(obj.transform.position, this.transform.position);
+      var point = selected ? selected.gameObject.transform.position : this.transform.position;
+      Dictionary<float, GameObject> ranking = new Dictionary<float, GameObject>();
 
-        int points = 0;
+      var lastPointLeft = objectsVisible.Aggregate((actual, next) => actual.transform.position.x < next.transform.position.x ? actual : next);
+
+      var lastPointRight = objectsVisible.Aggregate((actual, next) => actual.transform.position.x > next.transform.position.x ? actual : next);
+
+      foreach (var obj in objectsVisible) {
+        if (selected) {
+          if (obj == selected.gameObject) {
+            continue;
+          }
+          if (left) {
+            if (selected.gameObject == lastPointLeft) {
+              return lastPointRight;
+            }
+
+          } else {
+            if (selected.gameObject == lastPointRight) {
+              return lastPointLeft;
+            }
+          }
+        }
+
+
+
+        float points = 0;
+        var distanceFromPoint = Vector2.Distance(obj.transform.position, point);
+
+        points -= distanceFromPoint;
+
         if (left) {
-          if (direction.x < 0) {
+          if (obj.transform.position.x <= point.x) {
             points += 2;
           }
         } else {
-          if (direction.x >= 0) {
+          if (obj.transform.position.x >= point.x) {
             points += 2;
           }
         }
 
-        if (distanceObj <= distanceClose) {
-          points++;
-        }
-
-        if (points > lastPoints) {
-          mostClose = obj;
-          lastPoints = points;
-        }
+        ranking.Add(points, obj);
       }
+      return ranking.OrderByDescending((item) => item.Key).First().Value;
 
-      return mostClose;
     }
     return null;
   }
@@ -67,11 +87,24 @@ public class ThrowableController : MonoBehaviour {
   public void UpdateObjects(GameObject obj, bool remove) {
     if (remove) {
       if (objectsVisible.Contains(obj)) {
+        if (selected) {
+          if (obj == selected) {
+            selected = null;
+          }
+        }
+
         objectsVisible.Remove(obj);
       }
-      return;
+    } else {
+      if (!objectsVisible.Contains(obj)) {
+        objectsVisible.Add(obj);
+
+      }
     }
 
-    objectsVisible.Add(obj);
   }
+
+
+
+
 }
