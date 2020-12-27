@@ -6,9 +6,11 @@ using UnityEngine;
 
 public class ThrowableController : MonoBehaviour {
   private List<GameObject> objectsVisible;
-  private ThrowableScript selected;
+  private GameObject selected;
 
   private int currentObj = 0;
+
+  private bool throwedHold;
   // Start is called before the first frame update
   void Start() {
     objectsVisible = new List<GameObject>();
@@ -18,6 +20,19 @@ public class ThrowableController : MonoBehaviour {
   void Update() {
     var changeLeft = Input.GetButtonDown("Select Left");
     var changeRight = Input.GetButtonDown("Select Right");
+    var throwed = Input.GetButtonDown("Throw");
+    var hold = Input.GetButton("Throw");
+
+    if (hold && selected) {
+      Debug.Log("Hold");
+      throwedHold = true;
+      GetComponent<PlayerMovement>().Blocked(throwedHold);
+    } else if (throwedHold) {
+      Debug.Log("Release");
+      throwedHold = false;
+      GetComponent<PlayerMovement>().Blocked(throwedHold);
+    }
+
 
 
     if (changeLeft || changeRight) {
@@ -25,17 +40,33 @@ public class ThrowableController : MonoBehaviour {
       var obj = GetObjectClose(changeLeft);
       if (obj != null) {
         if (selected) {
-          selected.Diselect();
+          selected.GetComponent<ThrowableScript>().Diselect();
         }
-        selected = obj.GetComponent<ThrowableScript>();
-        selected.Select();
+        selected = obj;
+        selected.GetComponent<ThrowableScript>().Select();
       }
     }
+    if (throwed && selected) {
+      var horizontal = Input.GetAxisRaw("Horizontal");
+      var vertical = Input.GetAxisRaw("Vertical");
+
+      var direction = new Vector2(horizontal, vertical);
+      selected.GetComponent<ThrowableScript>().Throw(direction.normalized);
+      selected = null;
+    }
+
+
   }
 
   GameObject GetObjectClose(bool left) {
     if (objectsVisible.Count > 0) {
-      var point = selected ? selected.gameObject.transform.position : this.transform.position;
+
+      if (objectsVisible.Count == 1) {
+        return objectsVisible[0];
+      }
+
+      Debug.Log("Close " + objectsVisible.Count);
+      var point = selected ? selected.transform.position : this.transform.position;
       Dictionary<float, GameObject> ranking = new Dictionary<float, GameObject>();
 
       var lastPointLeft = objectsVisible.Aggregate((actual, next) => actual.transform.position.x < next.transform.position.x ? actual : next);
@@ -92,19 +123,16 @@ public class ThrowableController : MonoBehaviour {
             selected = null;
           }
         }
+        var removed = objectsVisible.RemoveAll(x => x == obj);
+        Debug.Log("Removed " + obj.name + " " + removed);
 
-        objectsVisible.Remove(obj);
       }
     } else {
       if (!objectsVisible.Contains(obj)) {
-        objectsVisible.Add(obj);
+        Debug.Log("Added " + obj.name);
 
+        objectsVisible.Add(obj);
       }
     }
-
   }
-
-
-
-
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
@@ -36,9 +37,7 @@ public class PlayerMovement : MonoBehaviour {
   void Update() {
 
     if (blocked) {
-      if (time >= 0) {
-        time -= Time.deltaTime;
-      }
+
       return;
     }
 
@@ -52,7 +51,10 @@ public class PlayerMovement : MonoBehaviour {
     movement.y = vertical;
 
     if (movement != Vector2.zero) {
-      updateVisible();
+      if (updateVisible.GetInvocationList().Length > 0) {
+        updateVisible();
+      }
+
       if (Mathf.Abs(horizontal) > RUNNING_THRESHOLD || Mathf.Abs(vertical) > RUNNING_THRESHOLD) {
         if (stepTime >= stepMaxTime) {
           GetComponent<NoiseGeneratorScript>().PlaySound(VOLUME_STEPS);
@@ -77,5 +79,9 @@ public class PlayerMovement : MonoBehaviour {
 
   public void Blocked(float time) {
     this.time = time;
+  }
+
+  public void Blocked(bool block) {
+    blocked = block;
   }
 }

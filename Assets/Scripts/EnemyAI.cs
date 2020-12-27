@@ -182,7 +182,7 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
       endReached = true;
       return;
     }
-    Debug.Log("Walking");
+
     Vector2 direction = (Vector2)path.vectorPath[currentWaypoint] - rigidbody.position;
     rigidbody.velocity = direction.normalized * speedModified;
 
@@ -216,7 +216,6 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
       }
 
       if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player") && !wallHit) {
-        Debug.Log("SAW");
 
         behaviour = EnemyBehaviour.Follow;
         direction = target - (Vector2)this.transform.position;
