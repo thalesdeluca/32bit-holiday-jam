@@ -16,7 +16,14 @@ public class KillScript : MonoBehaviour {
     if (other.gameObject.layer == LayerMask.NameToLayer("Player") && !onRange) {
       onRange = true;
       ai.TriggerHit();
-      Debug.Log("OnRange");
+
+    }
+  }
+
+  private void OnTriggerStay2D(Collider2D other) {
+    if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
+      onRange = true;
+      ai.TriggerHit();
 
     }
   }
@@ -24,7 +31,6 @@ public class KillScript : MonoBehaviour {
   private void OnTriggerExit2D(Collider2D other) {
     if (other.gameObject.layer == LayerMask.NameToLayer("Player") && onRange) {
       onRange = false;
-      Debug.Log("OutRange");
     }
   }
 }

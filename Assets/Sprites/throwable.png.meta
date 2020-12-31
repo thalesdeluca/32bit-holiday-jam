@@ -1,7 +1,61 @@
 fileFormatVersion: 2
 guid: 7ee28e63fa99a2645ae5cc4e0d5b4a68
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 7410588129591727374
+    second: throwable_0
+  - first:
+      213: -7357431110860939664
+    second: throwable_1
+  - first:
+      213: 243375401425951205
+    second: throwable_2
+  - first:
+      213: 4229250186976457064
+    second: throwable_3
+  - first:
+      213: -2727953157092564633
+    second: throwable_4
+  - first:
+      213: 5738499346725881956
+    second: throwable_5
+  - first:
+      213: -1432021762296324946
+    second: throwable_6
+  - first:
+      213: -1986150956832761477
+    second: throwable_7
+  - first:
+      213: 2592422265536283456
+    second: throwable_0
+  - first:
+      213: -6908552247470858009
+    second: throwable_1
+  - first:
+      213: -1965041606595173816
+    second: throwable_2
+  - first:
+      213: 5004342454229683364
+    second: throwable_3
+  - first:
+      213: -5547175950304438357
+    second: throwable_4
+  - first:
+      213: 5433146266385842675
+    second: throwable_5
+  - first:
+      213: 8229943410345458823
+    second: throwable_6
+  - first:
+      213: 1463097029416950227
+    second: throwable_7
+  - first:
+      213: 7942527695447371776
+    second: throwable_8
+  - first:
+      213: -9024501174268080551
+    second: throwable_9
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -40,7 +94,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -121,7 +175,217 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: throwable_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 48
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0438a15b0522af320800000000000000
+      internalID: 2592422265536283456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: throwable_1
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 44
+        width: 28
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e0e5418554ef10a0800000000000000
+      internalID: -6908552247470858009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: throwable_2
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 52
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 842280ee115cab4e0800000000000000
+      internalID: -1965041606595173816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: throwable_3
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 48
+        width: 8
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ac44cea2fef27540800000000000000
+      internalID: 5004342454229683364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: throwable_4
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 43
+        width: 21
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba793870dd87403b0800000000000000
+      internalID: -5547175950304438357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: throwable_5
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 6
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f10ba44eb9666b40800000000000000
+      internalID: 5433146266385842675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: throwable_6
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 2
+        width: 32
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78c35377de1a63270800000000000000
+      internalID: 8229943410345458823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: throwable_7
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 10
+        width: 20
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d993561ff6fd4410800000000000000
+      internalID: 1463097029416950227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: throwable_8
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 6
+        width: 12
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 000b7d19bd6893e60800000000000000
+      internalID: 7942527695447371776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: throwable_9
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 1
+        width: 25
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95ec7a0fef782c280800000000000000
+      internalID: -9024501174268080551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []

@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour {
 
   public GameObject player;
 
+  [SerializeField]
   private string currentLevel = "SampleScene";
 
   private float resetTime = 0;

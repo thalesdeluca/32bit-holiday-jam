@@ -10,7 +10,8 @@ public enum EnemyBehaviour {
   Follow,
   Searching,
   Patrol,
-  Catching
+  Catching,
+  Hear
 }
 
 public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
@@ -61,7 +62,15 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
 
 
   [SerializeField]
-  private float catchMaxTime = 0.8f;
+  private float catchMaxTime = 0.4f;
+
+  private const float STUN_TIME = 2f;
+
+  private bool stunned = false;
+
+  private Animator animator;
+
+  private SpriteRenderer sprite;
 
 
   // Start is called before the first frame update
@@ -73,13 +82,34 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
     player = GameObject.Find("Player");
     speedModified = speed / 10f;
     direction = rigidbody.velocity;
-
+    animator = GetComponent<Animator>();
+    sprite = this.transform.Find("Sprite").GetComponent<SpriteRenderer>();
   }
 
   // Update is called once per frame
   void Update() {
+    if (stunned) {
+      if (time <= STUN_TIME) {
+        time += Time.deltaTime;
+        return;
+      } else {
+        stunned = false;
+        GetComponent<Collider2D>().enabled = true;
+
+        behaviour = EnemyBehaviour.Searching;
+        time = 0;
+      }
+    }
+
+
     switch (behaviour) {
+      case EnemyBehaviour.Hear:
+        direction = target - (Vector2)this.transform.position;
+        WalkToTarget();
+        break;
+
       case EnemyBehaviour.Follow:
+        vision.GetComponentInChildren<SpriteRenderer>().color = Color.red;
         direction = player.transform.position - this.transform.position;
         WalkToTarget();
         break;
@@ -97,7 +127,7 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
         if (time <= searchTime) {
           time += Time.deltaTime;
 
-
+          vision.GetComponentInChildren<SpriteRenderer>().color = Color.white;
           if (time <= searchTime / 3f || time >= (searchTime / 3f * 2)) {
             direction.x = (direction.normalized.x + (time >= searchTime / 3f ? -0.025f : 0.02f));
             direction.y = (direction.normalized.y + (time >= searchTime / 3f ? -0.025f : 0.01f));
@@ -113,15 +143,18 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
         rigidbody.velocity = Vector2.zero;
 
         if (time <= catchMaxTime) {
+          vision.Find("Attack").gameObject.SetActive(true);
           time += Time.deltaTime;
         } else {
           time = 0;
+
           if (vision.GetComponent<KillScript>().onRange) {
-            Debug.Log("Hit");
             player.GetComponent<PlayerMovement>().Blocked();
 
             GameController.Instance.Reset();
           } else {
+            vision.Find("Attack").gameObject.SetActive(false);
+
             time = 0;
             behaviour = EnemyBehaviour.Searching;
           }
@@ -156,7 +189,25 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
     Vector2 direction = (Vector2)path.vectorPath[currentWaypoint] - rigidbody.position;
     rigidbody.velocity = direction.normalized * speedModified;
 
-    vision.transform.rotation = Quaternion.Euler(0, 0, Vector2.Angle(Vector2.right, direction.normalized) * (direction.x < 0 ? -1 : 1));
+
+    if (direction.x > 0) {
+      sprite.flipX = true;
+      animator.Play("MoveHorizontal");
+    } else if (direction.x < 0) {
+      sprite.flipX = false;
+      animator.Play("MoveHorizontal");
+    } else {
+      sprite.flipX = false;
+      if (direction.y > 0) {
+        animator.Play("MoveVertical");
+      } else {
+        animator.Play("idle");
+      }
+    }
+
+
+
+    vision.transform.rotation = Quaternion.Euler(0, 0, Vector2.Angle(Vector2.right, direction.normalized) * (direction.y <= 0 ? -1 : 1));
 
     float distance = Vector2.Distance(rigidbody.position, path.vectorPath[currentWaypoint]);
     if (distance < nextPointDist) {
@@ -170,7 +221,6 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
     if (endReached) {
       time = 0;
       endReached = false;
-      Debug.Log("End");
 
       if (!inSight) {
         behaviour = EnemyBehaviour.Searching;
@@ -186,7 +236,9 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
     Vector2 direction = (Vector2)path.vectorPath[currentWaypoint] - rigidbody.position;
     rigidbody.velocity = direction.normalized * speedModified;
 
-    vision.transform.rotation = Quaternion.Euler(0, 0, Vector2.Angle(Vector2.right, direction.normalized) * (direction.x < 0 ? -1 : 1));
+
+
+    vision.transform.rotation = Quaternion.Euler(0, 0, Vector2.Angle(Vector2.right, this.direction.normalized) * (this.direction.y <= 0 ? -1 : 1));
 
     float distance = Vector2.Distance(rigidbody.position, path.vectorPath[currentWaypoint]);
     if (distance < nextPointDist) {
@@ -235,7 +287,7 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
     if (point != target && currentWaypoint > 1) {
       target = point;
       seeker.StartPath(rigidbody.position, target, OnPathComplete);
-      speedModified = speed / 3f;
+      speedModified = speed / 2f;
     }
 
   }
@@ -252,15 +304,34 @@ public class EnemyAI : MonoBehaviour, NoiseDetectionScript {
     }
   }
 
-  public void TriggerHit() {
+  public void Stun() {
+    rigidbody.velocity = Vector2.zero;
+    stunned = true;
+    GetComponent<Collider2D>().enabled = false;
     time = 0;
-    behaviour = EnemyBehaviour.Catching;
+  }
+
+  public void TriggerHit() {
+    if (behaviour != EnemyBehaviour.Catching) {
+      time = 0;
+      behaviour = EnemyBehaviour.Catching;
+    }
+
+  }
+
+  private void OnCollisionEnter2D(Collision2D other) {
+    if (!stunned) {
+      if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
+        other.gameObject.GetComponent<PlayerMovement>().Blocked(0.1f);
+      }
+    }
+
   }
 
   public void Hear(Vector2 point) {
     if (behaviour != EnemyBehaviour.Follow) {
       inSight = true;
-      behaviour = EnemyBehaviour.Follow;
+      behaviour = EnemyBehaviour.Hear;
       FollowPlayer(point);
       Vector2 direction = (Vector2)this.transform.position - point;
       vision.transform.rotation = Quaternion.Euler(0, 0, Vector2.Angle(Vector2.right, direction.normalized) * (direction.x < 0 ? -1 : 1));

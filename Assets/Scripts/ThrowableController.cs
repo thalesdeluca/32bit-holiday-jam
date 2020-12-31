@@ -20,17 +20,23 @@ public class ThrowableController : MonoBehaviour {
   void Update() {
     var changeLeft = Input.GetButtonDown("Select Left");
     var changeRight = Input.GetButtonDown("Select Right");
-    var throwed = Input.GetButtonDown("Throw");
+    var throwed = Input.GetButtonUp("Throw");
     var hold = Input.GetButton("Throw");
+
+    var horizontal = Input.GetAxisRaw("Horizontal");
+    var vertical = Input.GetAxisRaw("Vertical");
+
+    var direction = new Vector2(horizontal, vertical);
 
     if (hold && selected) {
       Debug.Log("Hold");
       throwedHold = true;
-      GetComponent<PlayerMovement>().Blocked(throwedHold);
+      selected.GetComponent<ThrowableScript>().Direction(direction.normalized);
+      GetComponent<PlayerMovement>().Blocked(true);
     } else if (throwedHold) {
       Debug.Log("Release");
       throwedHold = false;
-      GetComponent<PlayerMovement>().Blocked(throwedHold);
+      GetComponent<PlayerMovement>().Blocked(0.6f);
     }
 
 
@@ -47,10 +53,7 @@ public class ThrowableController : MonoBehaviour {
       }
     }
     if (throwed && selected) {
-      var horizontal = Input.GetAxisRaw("Horizontal");
-      var vertical = Input.GetAxisRaw("Vertical");
 
-      var direction = new Vector2(horizontal, vertical);
       selected.GetComponent<ThrowableScript>().Throw(direction.normalized);
       selected = null;
     }
@@ -65,9 +68,8 @@ public class ThrowableController : MonoBehaviour {
         return objectsVisible[0];
       }
 
-      Debug.Log("Close " + objectsVisible.Count);
       var point = selected ? selected.transform.position : this.transform.position;
-      Dictionary<float, GameObject> ranking = new Dictionary<float, GameObject>();
+      Dictionary<GameObject, float> ranking = new Dictionary<GameObject, float>();
 
       var lastPointLeft = objectsVisible.Aggregate((actual, next) => actual.transform.position.x < next.transform.position.x ? actual : next);
 
@@ -106,10 +108,10 @@ public class ThrowableController : MonoBehaviour {
             points += 2;
           }
         }
-
-        ranking.Add(points, obj);
+        Debug.Log(obj.name);
+        ranking.Add(obj, points);
       }
-      return ranking.OrderByDescending((item) => item.Key).First().Value;
+      return ranking.OrderByDescending((item) => item.Value).First().Key;
 
     }
     return null;
@@ -124,12 +126,10 @@ public class ThrowableController : MonoBehaviour {
           }
         }
         var removed = objectsVisible.RemoveAll(x => x == obj);
-        Debug.Log("Removed " + obj.name + " " + removed);
 
       }
     } else {
       if (!objectsVisible.Contains(obj)) {
-        Debug.Log("Added " + obj.name);
 
         objectsVisible.Add(obj);
       }

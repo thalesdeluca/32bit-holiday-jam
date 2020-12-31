@@ -25,7 +25,7 @@ public class NoiseScript : MonoBehaviour {
     if (triggered) {
 
       radius += Time.deltaTime * 4;
-      if (radius >= volume * 1.10) {
+      if (radius >= volume * 1.2) {
         triggered = false;
         Destroy(this.gameObject);
         radius = 0;
@@ -33,12 +33,11 @@ public class NoiseScript : MonoBehaviour {
       } else if (radius >= volume) {
 
       } else {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(this.transform.position, radius / 2);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(this.transform.position, radius / 1.4f);
         this.transform.localScale = new Vector3(radius, radius, 1);
 
 
         foreach (Collider2D hit in hits) {
-
           MonoBehaviour[] scripts = hit.gameObject.GetComponents<MonoBehaviour>();
           foreach (var script in scripts) {
             if (script is NoiseDetectionScript) {
@@ -47,6 +46,8 @@ public class NoiseScript : MonoBehaviour {
             }
           }
         }
+
+
       }
 
     }

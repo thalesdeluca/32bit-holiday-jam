@@ -6,6 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 0c48cd8e2b4e12d43a03a0cf584a11fb
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Street.unity
+    guid: 4f79b33b435da224bb9c09d18ef5cfb7
+  - enabled: 1
+    path: Assets/Scenes/Subway.unity
+    guid: 4f1fccf8cb3143f4ab8b51c9f2107201
+  - enabled: 1
+    path: Assets/Scenes/Secret.unity
+    guid: ecc85efaedb2d074a8a818064c2dc71e
+  - enabled: 1
+    path: Assets/Scenes/New Scene.unity
+    guid: 4466b8ce47b3db642bb65851beeef2a2
   m_configObjects: {}
